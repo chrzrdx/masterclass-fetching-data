@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        display: grid;
+        place-content: center;
+        min-height: 100vh;
+      }
+      main {
+        display: grid;
+        gap: 10px;
+        max-width: 300px;
+        border: 2px solid #eee;
+        padding: 20px;
+      }
+      input {
+        width: 100%;
+        font-size: 24px;
+        padding: 8px;
+      }
+      img {
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <input type="text" placeholder="enter name" />
+      <div class="avatar">
+        <img
+          src="https://raw.githubusercontent.com/Ashwinvalento/cartoon-avatar/master/lib/images/female/5.png"
+          alt=""
+          srcset=""
+        />
+      </div>
+    </main>
+
+    <script src="./vendors/lib/cartoon-avatar.js"></script>
+
+    <script>
+      function updateProfilePicture(name) {
+        if (name.length < 3) return
+
+        fetch(`https://api.genderize.io?name=${name}`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.probability > 0.8) {
+              const avatar = generate_avatar({gender: data.gender})
+              const img = document.querySelector('img')
+              img.setAttribute('src', avatar)
+            }
+          })
+      }
+
+      const input = document.querySelector('input')
+      input.addEventListener('change', function(event) {
+          const name = event.target.value
+          updateProfilePicture(name)
+      })
+    </script>
+  </body>
+</html>
